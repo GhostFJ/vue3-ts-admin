@@ -1,0 +1,1 @@
+const title = 'Vue admin'
