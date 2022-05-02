@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import eslintPlugin from 'vite-plugin-eslint'
 import { resolve } from 'path'
+import { viteMockServe } from "vite-plugin-mock";
 
 function pathResolve (dir: string) {
   return resolve(process.cwd(), '.', dir)
@@ -34,6 +35,9 @@ export default defineConfig({
     vue(),
     eslintPlugin({
       // 配置项
+    }),
+    viteMockServe({
+      supportTs: true
     })
   ],
   server: {

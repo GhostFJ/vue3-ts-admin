@@ -62,15 +62,17 @@
 import { validUsername } from '@/utils/validate'
 import { reactive, ref } from '@vue/runtime-core'
 import { User, Lock } from '@element-plus/icons-vue'
+import { useUseStore } from '@/store/modules/user'
+import { ILoginData } from '#/user'
 
-const validateUsername = (rule, value, callback) => {
+const validateUsername = (rule: any, value: any, callback: any) => {
   if (!validUsername(value)) {
     callback(new Error('Please enter the correct user name'))
   } else {
     callback()
   }
 }
-const validatePassword = (rule, value, callback) => {
+const validatePassword = (rule: any, value: any, callback: any) => {
   if (value.length < 6) {
     callback(new Error('The password can not be less than 6 digits'))
   } else {
@@ -78,25 +80,28 @@ const validatePassword = (rule, value, callback) => {
   }
 }
 
-const loginRules = {
+const loginRules = reactive({
   username: [{ required: true, trigger: 'blur', validator: validateUsername }],
   password: [{ required: true, trigger: 'blur', validator: validatePassword }]
-}
+})
 
 const loading = ref(false)
 
 const password = ref<HTMLInputElement | null>(null)
 
 const loginForm = ref<HTMLFormElement | null>(null)
-const loginFormData = reactive({
+const loginFormData = reactive<ILoginData>({
   username: 'admin',
   password: '111111'
 })
 
+const userStore = useUseStore()
+
 const handleLogin = () => {
-  loginForm.value && loginForm.value.validate(valid => {
+  loginForm.value && loginForm.value.validate((valid: any) => {
     if (valid) {
       loading.value = true
+      userStore.login(loginFormData)
       // this.$store.dispatch('user/login', this.loginForm).then(() => {
       //   this.$router.push({ path: this.redirect || '/' })
       //   this.loading = false
